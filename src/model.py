@@ -112,7 +112,7 @@ class FaceRecognitionCNN(nn.Module):
         self.resnet = InceptionResnetV1(pretrained='vggface2')
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(0.5)
-        self.fc = nn.Linear(512, 1)
+        self.fc = nn.Linear(512, 5)
 
     def forward(self, images):
         out = self.resnet(images)
@@ -120,7 +120,6 @@ class FaceRecognitionCNN(nn.Module):
         out = self.dropout(out)
         out = self.fc(out)
         return out.squeeze()
-
 
 class Encoder2DConv3D(nn.Module):
     def __init__(self, face_recognition_cnn_path=None):

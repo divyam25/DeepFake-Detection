@@ -1,7 +1,7 @@
 import json
 import os
 import random
-
+import numpy as np
 import torch
 from PIL import Image, ImageFile
 from torch import tensor
@@ -118,10 +118,20 @@ def read_dataset(
         max_images_per_video, splits_path='../dataset/splits/'
 ):
     data_class_dirs = os.listdir(data_dir)
+    print(data_class_dirs)
     data_sets = {}
     for data_class_dir in data_class_dirs:
         data_class_dir_path = os.path.join(data_dir, data_class_dir)
-        target = 0 if 'original' in data_class_dir.lower() else 1
+        if 'original' in data_class_dir.lower():
+            target = 0
+        elif 'face2face' in data_class_dir.lower():
+            target = 1
+        elif 'faceswap' in data_class_dir.lower():
+            target = 2
+        elif 'neural' in data_class_dir.lower():
+            target = 3
+        elif 'deepfake' in data_class_dir.lower():
+            target = 4
         data_sets[data_class_dir] = read_train_test_val_dataset(
             data_class_dir_path, data_class_dir, target, splits_path, transform=transform,
             max_videos=max_videos, max_images_per_video=max_images_per_video, window_size=window_size
